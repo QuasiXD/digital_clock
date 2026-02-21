@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QWidget,QApplication,QLabel,QVBoxLayout
 from PyQt6.QtCore import QTimer,QTime,Qt
-
+from PyQt6.QtGui import QFont,QFontDatabase
 class DigitalClock(QWidget):
 
     def __init__(self):
@@ -12,7 +12,7 @@ class DigitalClock(QWidget):
 
     def initUI(self):
         self.setWindowTitle("Digital Clock")
-        self.setGeometry(400,250,300,100)
+        self.setGeometry(300,300,300,100)
 
         vbox = QVBoxLayout()
         vbox.addWidget(self.time_label)
@@ -21,14 +21,20 @@ class DigitalClock(QWidget):
         self.time_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.time_label.setStyleSheet("font-size: 150px;"
-                                      "font-family: Arial;"
                                       "color: hsl(111,100%,50%);")
         self.setStyleSheet("background-color: black;")
-
+        
+        font_id = QFontDatabase.addApplicationFont("C:/Users/DELL/Desktop/Python Stuff/Advanced/digital_clock/DS-DIGIT.TTF")
+        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        my_font = QFont(font_family,150)
+        self.time_label.setFont(my_font)
+        
+        self.timer.timeout.connect(self.update_time)
+        self.timer.start(1000)
         self.update_time()
 
     def update_time(self):
-        current_time = QTime.currentTime().toString("hh:mm:ss")
+        current_time = QTime.currentTime().toString("hh:mm:ss AP")
         self.time_label.setText(current_time)
 if __name__ == "__main__":
     app = QApplication(sys.argv)
